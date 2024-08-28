@@ -1,26 +1,58 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="app-wrapper">
+    <Header />
+    <div class="main-container flex h-screen bg-gray-100">
+      <!-- Menú Lateral -->
+      <MenuLateral v-if="isAuthenticated" />
+      
+      <!-- Contenido Principal -->
+      <main class="flex-grow p-6 content">
+        <router-view />
+      </main>
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from './components/Header.vue';
+import MenuLateral from './components/MenuLateral.vue';
+import { useUsuarioStore } from './stores/usuarioStore';
+import { computed } from 'vue';
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    Header,
+    MenuLateral
+  },
+  setup() {
+    const storeUser = useUsuarioStore();
+    const isAuthenticated = computed(() => storeUser.isAuthenticated);
+
+    return {
+      isAuthenticated
+    };
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+.content {
+  flex: 1;
+  padding: 1rem;
+  margin: 50px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>
