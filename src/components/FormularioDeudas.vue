@@ -48,6 +48,7 @@
   <script>
   import { useFinanzasStore } from '@/stores/finanzasStore';
   import Swal from 'sweetalert2';
+  import {useUsuarioStore} from '@/stores/usuarioStore'
   
   export default {
     data() {
@@ -60,12 +61,13 @@
     methods: {
       async submitDebt() {
         const finanzasStore = useFinanzasStore();
-  
+        const userStore = useUsuarioStore();
         try {
           await finanzasStore.createNewDebt({
+            user : userStore.id,
             tipo_de_deuda: this.tipoDeuda,
             monto_total: this.montoTotal,
-            tasa_de_interes: this.tasaInteres,
+            tasa_de_interés: this.tasaInteres,
             monto_restante: this.montoTotal,
             fecha_de_vencimiento: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]  // Un año desde hoy
           });

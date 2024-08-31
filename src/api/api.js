@@ -228,6 +228,7 @@ export const createCategory = async (data) => {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
+      'X-CSRFToken': getCsrfToken(), // Agregar el token CSRF aquí
     },
     body: JSON.stringify(data),
     credentials: 'include',
@@ -275,19 +276,23 @@ export const getReports = async () => {
 };
 
 export const createReport = async (data) => {
+  
+  console.log("lilililililil")
   const token = getToken();
+  
   const response = await fetch(`${baseURL}/reports/create/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
+      'X-CSRFToken': getCsrfToken(),
     },
     body: JSON.stringify(data),
     credentials: 'include',
   });
 
   if (!response.ok) {
-    throw new Error('Error al crear un reporte');
+    throw new Error('Error al crear el reporte');
   }
 
   return await response.json();
@@ -595,3 +600,63 @@ export const updateUserProfile = async (userId, userData) => {
   }
 };
 
+export const getReportes = async () => {
+  const token = getToken();
+  const response = await fetch(`${baseURL}/reports/`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener los reportes');
+  }
+
+  return await response.json();
+};
+
+
+export const getReport = async (reportId) => {
+  const token = getToken();
+  const response = await fetch(`${baseURL}/reports/${reportId}/`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener el reporte');
+  }
+
+  return await response.json();
+};
+
+// Función para crear una nueva deuda
+export const createNewDebt = async (debtData) => {
+  try {
+    const token = getToken();
+    const csrfToken = getCsrfToken();
+
+    const response = await fetch(`${baseURL}/debts/`, {  // Asumiendo que la URL para DebtListCreateView es /debts/
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'X-CSRFToken': csrfToken,  // Si estás usando Django con protección CSRF
+      },
+      body: JSON.stringify(debtData),
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al crear la deuda');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error al crear la deuda:', error);
+    throw error;
+  }
+};

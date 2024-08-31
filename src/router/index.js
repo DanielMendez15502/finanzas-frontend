@@ -5,6 +5,7 @@ import UserInfor from  '@/components/UserInfoForm.vue';
 import MetasFinanzasV from '@/views/MetasFinanzasV.vue';
 import profileV from '@/views/profileV.vue';
 import AjustesCView from '@/views/ajustesV.vue';
+import reportsV from '@/views/reportsV.vue';
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/settings',
     name: 'ajustesV',
     component: AjustesCView
+  },
+  {
+    path: '/reports',
+    name: 'reportsV',
+    component: reportsV
   },
 ];
 

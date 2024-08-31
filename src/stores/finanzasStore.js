@@ -10,6 +10,7 @@ export const useFinanzasStore = defineStore('finanzasStore', {
     categories: [],
     reports: [],
     notifications: [],
+    debts: [],
     ingresosMensuales: null,
     gastosMensuales: null,
     ahorraRegularmente: false,
@@ -140,7 +141,7 @@ export const useFinanzasStore = defineStore('finanzasStore', {
     async createNewCategory(categoryData) {
       try {
         const response = await api.createCategory(categoryData);
-        this.categories.push(response.data);
+        this.categories.push(response);
       } catch (error) {
         console.error('Error al crear una categoría:', error);
       }
@@ -241,9 +242,10 @@ export const useFinanzasStore = defineStore('finanzasStore', {
     },
       async obtenerInformacionGeneralPorId(id){
         const response = await api.obtenerInformacionGeneralPorId(id);
-        console.log(response)
         this.ingresosMensuales = response.ingresosMensuales;
         this.gastosMensuales = response.gastosMensuales;
+
+        return response;
       },
       async fetchTransaccionesRecientes() {
         try {
@@ -269,6 +271,20 @@ export const useFinanzasStore = defineStore('finanzasStore', {
           return false; 
         }
       },
+      async createNewDebt(debtData) {
+        try {
+          // Envía la solicitud POST para crear una nueva deuda
+          const response = await api.createNewDebt(debtData);
+  
+          // Actualiza el estado `debts` con la nueva deuda agregada
+          this.debts.push(response.data);
+        } catch (error) {
+          console.error('Error al crear la deuda:', error);
+          // Puedes manejar el error adicionalmente si es necesario
+          throw error;
+        }
+      },
+
       
   },
   getters: {
